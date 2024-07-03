@@ -1,6 +1,6 @@
 # Markov Chain Monte Carlo Simulation of 2D Ising Model
 
-This repository contains a Julia implementation of a Markov Chain Monte Carlo (MCMC) simulation of the 2D Ising model. It was originally created for a PHY644 Term Paper.
+This repository contains a Julia implementation of a Markov Chain Monte Carlo (MCMC) simulation of the 2D Ising model. It was originally created for a PHY652 Term Paper.
 
 ## Features
 
