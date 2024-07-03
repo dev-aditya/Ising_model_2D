@@ -8,6 +8,7 @@ This repository contains a Julia implementation of a Markov Chain Monte Carlo (M
 - Analysis of various physical properties like specific heat capacity, average magnetization, average energy, and magnetic susceptibility over a range of temperatures.
 - Utilization of multi-threading for performance improvement.
 - Progress tracking of the simulation runs.
+- Autocorrelation-time analysis
 
 ## Setup
 _Anyone cloning this repository can recreate the exact environment by navigating to the project directory and activating the project:_
