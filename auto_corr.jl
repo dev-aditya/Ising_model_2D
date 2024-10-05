@@ -1,8 +1,10 @@
-using StatsBase
-using Plots
-using Base.Threads
-using GLM
-include("simulation.jl")
+include("src/MetropolisAlgorithm.jl")
+using .MetropolisAlgorithm: metropolis_step
+
+include("src/Utils.jl")
+using .Utils: energy, magnetization
+
+using StatsBase, Plots, Base.Threads, GLM, Random, ProgressMeter
 
 L::Int64 = 50 # Lattice size
 J::Float64 = 1.0 # Interaction strength
@@ -20,7 +22,7 @@ E = zeros(length(T_list), monte_steps)
 M = zeros(length(T_list), monte_steps)
 
 rngs = [MersenneTwister() for _ in 1:Threads.nthreads()]
-@threads for i in eachindex(T_list)
+@showprogress @threads for i in eachindex(T_list)
     rng = rngs[Threads.threadid()]
     lattice = rand(rng, [-1, 1], L, L)
     for j in 1:eq_steps
@@ -43,6 +45,8 @@ end
 
 τ::Vector{Float64} = zeros(Float64, length(T_list))
 x = collect(1:length(num_lags))[1:5]
+
+
 for i in eachindex(T_list)
     y = M_corr[i, 1:5]
     X = hcat(ones(length(x)), x)
@@ -55,15 +59,21 @@ for i in eachindex(T_list)
     println("The autocorrelation time (τ) for T = $T", " is: ", τ[i])
 end
 
-p1 = plot(num_lags, M_corr[1, :], label="T < Tc", xlabel="Lag", ylabel="acf(M)", title="Energy autocorrelation vs lag")
+p1 = plot(num_lags, M_corr[1, :], label="T < Tc", xlabel="Lag",
+    ylabel="acf(M)", title="Energy autocorrelation vs lag")
 plot!(p1, num_lags, M_corr[2, :], label="T = Tc")
 plot!(p1, num_lags, M_corr[3, :], label="T > Tc")
-annotate!(p1, [(5, M_corr[1, 5], text("τ = $(τ[1])", :left)), (5, M_corr[2, 5], text("τ = $(τ[2])", :left)), (5, M_corr[3, 5], text("τ = $(τ[3])", :left))])
+annotate!(p1, [(5, M_corr[1, 5], text("τ = $(τ[1])", :left)),
+    (5, M_corr[2, 5], text("τ = $(τ[2])", :left)),
+    (5, M_corr[3, 5], text("τ = $(τ[3])", :left))])
 
-p2 = plot(num_lags, E_corr[1, :], label="T < Tc", xlabel="Lag", ylabel="acf(E)", title="Energy autocorrelation vs lag")
+p2 = plot(num_lags, E_corr[1, :], label="T < Tc", xlabel="Lag",
+    ylabel="acf(E)", title="Energy autocorrelation vs lag")
 plot!(p2, num_lags, E_corr[2, :], label="T = Tc")
 plot!(p2, num_lags, E_corr[3, :], label="T > Tc")
-annotate!(p2, [(5, E_corr[1, 5], text("τ = $(τ[1])", :left)), (5, E_corr[2, 5], text("τ = $(τ[2])", :left)), (5, E_corr[3, 5], text("τ = $(τ[3])", :left))])
+annotate!(p2, [(5, E_corr[1, 5], text("τ = $(τ[1])", :left)),
+    (5, E_corr[2, 5], text("τ = $(τ[2])", :left)),
+    (5, E_corr[3, 5], text("τ = $(τ[3])", :left))])
 
 plot(p1, p2, layout=(2, 1), size=(600, 700))
 

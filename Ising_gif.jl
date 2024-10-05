@@ -1,7 +1,10 @@
-using Plots
-using ProgressMeter
-include("simulation.jl")
-include("utilities.jl")
+include("src/MetropolisAlgorithm.jl")
+using .MetropolisAlgorithm: metropolis_step
+
+include("src/Utils.jl")
+using .Utils: energy, magnetization
+
+using Plots, ProgressMeter
 
 # Parameters 
 N_grid::Int64 = 100  # Size of the lattice
@@ -17,15 +20,16 @@ lattice = rand([-1, 1], N_grid, N_grid)
 function plot_grid(lattice, step, T)
     N_grid = size(lattice, 1)
     m = round(magnetization(lattice) / N_grid^2, digits=2)
-    E = round( energy(lattice, J) / N_grid^2, digits=2)
+    E = round(energy(lattice, J) / N_grid^2, digits=2)
     heatmap(1:N_grid, 1:N_grid, lattice,
         aspect_ratio=:equal, c=:grays, yflip=true,
         xlabel="N = $N_grid", ylabel="N = $N_grid",
         legend=true, border=:none, ticks=false)
     title!("Step: $step, \n T = $T, m = $(m), E = $(E)")
 end
+
 p = Progress(N_steps, 1, "Simulation Progress: ", 50)
-if T <= Tc 
+if T <= Tc
     println("Starting Simulation with Annealing ...")
     T_ann = zeros(1000)
     n_ann = Int64(length(T_ann) - length(T_ann) // 10)
