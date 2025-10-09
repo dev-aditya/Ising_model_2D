@@ -1,0 +1,55 @@
+# ---- Julia compiled and build artifacts ----
+*.ji
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.dSYM/
+*.exe
+
+# Coverage and memory profiling
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+
+# Pkg/deps build outputs (for packages/apps with deps/)
+deps/deps.jl
+deps/build.log
+deps/downloads/
+deps/usr/
+deps/src/
+
+# Documentation build output
+/docs/build/
+
+# Optional: keep environment lockfile out of VCS to avoid cross-platform issues
+# Comment out the next line if you want to commit the Manifest
+Manifest.toml
+
+# Editors/IDEs
+.vscode/
+.idea/
+
+# Jupyter/Pluto
+.ipynb_checkpoints/
+.jupyter/
+# Pluto state (if present)
+pluto_state.toml
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Logs
+*.log
+
+# Python virtual environments (if any used alongside)
+.venv/
+venv/
+env/
+
+# Node artifacts (if any)
+node_modules/
